@@ -1,0 +1,4 @@
+.env
+package-lock
+/db/isok.db
+node_modules

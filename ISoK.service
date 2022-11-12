@@ -1,0 +1,11 @@
+[Unit]
+Description=InSearchofKnowledge
+
+[Service]
+Type=simple
+WorkingDirectory=/root/ISoK
+ExecStart=/root/ISoK/isok-app.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

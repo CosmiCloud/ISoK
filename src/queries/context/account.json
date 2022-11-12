@@ -1,0 +1,51 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "account": {
+    "@type": "Person",
+    "chat_id": "",
+    "name": "",
+    "owner": "",
+    "knowledge": [
+      {
+        "name": "total",
+        "level": 5,
+        "experience": 0
+      },
+      {
+        "name": "elements",
+        "level": 1,
+        "experience": 0
+      },
+      {
+        "name": "navigation",
+        "level": 1,
+        "experience": 0
+      },
+      {
+        "name": "magic",
+        "level": 1,
+        "experience": 0
+      },
+      {
+        "name": "survival",
+        "level": 1,
+        "experience": 0
+      },
+      {
+        "name": "botany",
+        "level": 1,
+        "experience": 0
+      }
+    ],
+    "inventory": [
+      {}
+    ],
+    "explores": [
+      {}
+    ],
+    "treks": [
+      {}
+    ]
+  }
+}
