@@ -7,8 +7,9 @@ const db = require("better-sqlite3")(process.env.GAME_DB, {
 
 module.exports = trekEncounter = async (area, row) => {
 
-  for (i = 0; i < row.knowledge.length; ++i) {
-    knowledge = row.knowledge[i]
+  knowledge =  JSON.parse(row.knowledge)
+  for (i = 0; i < knowledge.length; ++i) {
+    knowledge = knowledge[i]
 
     if(knowledge.name == 'total'){
         total_lv = knowledge.level
@@ -268,7 +269,7 @@ module.exports = trekEncounter = async (area, row) => {
             trek_step_rarity.push('common')
         }
 
-        prized
+        //prized
         if(pool_roll < 1500 && pool_roll >= 1100){
             trek_step_rarity.push('prized')
         }
@@ -300,6 +301,8 @@ module.exports = trekEncounter = async (area, row) => {
         }
     }
 
+    console.log(`TREK EVENTS ${trek_events}`)
+
     event_story =''
     for (i = 0; i < trek_events.length; ++i) {
         trek_event = trek_events[i]
@@ -324,6 +327,7 @@ module.exports = trekEncounter = async (area, row) => {
                 inv_item = inventory[i]
 
                 if (inv_item.name == trek_event.item_required.name) {
+                    trek_status = `success`
                     event_result = trek_event.success_description
                     if(!inv_item.account && inv_item.knowledge != 'taming'){
                         inventory[i]["quantity"] =
@@ -334,6 +338,7 @@ module.exports = trekEncounter = async (area, row) => {
                         break;
                     }
                 }else{
+                    trek_status = `failure`
                     event_result = trek_event.failed_description
                 }
             }
@@ -342,10 +347,11 @@ module.exports = trekEncounter = async (area, row) => {
         event_story = event_story + event_result
     }
 
+    console.log(event_story)
   return {
     result: {
         story: event_story,
-        event_status: event_status
+        trek_status: trek_status
         }
   };
 };

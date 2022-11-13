@@ -1,6 +1,5 @@
 require("dotenv").config();
 const fs = require("fs");
-const trekEncounter = require("./trekEncounter");
 
 const db = require("better-sqlite3")(process.env.GAME_DB, {
   verbose: console.log,
@@ -50,7 +49,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
   addItemInventory = await queryTypes.addItemInventory();
   trekEncounter = await queryTypes.trekEncounter();
 
-  trekEncounter = await itemPootrekEncounterl
+  trekEncounter = await trekEncounter
         .getData(area, row)
         .then(async ({ result }) => {
           return result;
