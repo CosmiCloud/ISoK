@@ -11,7 +11,7 @@ module.exports = addItemInventory = async (chat_id,username,pool,inventory) => {
 
   roll = getRandomInt(pool.length);
   item = pool[roll];
-  console.log(`Item roll: ${item}`);
+  console.log(`Item roll: ${JSON.stringify(item)}`);
 
   inventory = JSON.parse(inventory)
   if (inventory.filter((e) => e.name === item.name).length >0) {
@@ -39,6 +39,13 @@ module.exports = addItemInventory = async (chat_id,username,pool,inventory) => {
       effect: row.effect,
     };
     inventory.push(added_item);
+    inventory = inventory.filter(element =>{
+      if (Object.keys(element).length !== 0) {
+        return true;
+      }
+    
+      return false;
+    })
   }
 
   await db
@@ -48,6 +55,8 @@ module.exports = addItemInventory = async (chat_id,username,pool,inventory) => {
     .run(JSON.stringify(inventory), chat_id, username);
       
     return {
-      result: item.name,
+      result: {
+        name:item.name,
+        quantity: item.quantity}
     };
 }

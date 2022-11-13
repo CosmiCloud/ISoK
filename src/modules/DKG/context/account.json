@@ -9,7 +9,7 @@
     "knowledge": [
       {
         "name": "total",
-        "level": 5,
+        "level": 7,
         "experience": 0
       },
       {
@@ -23,7 +23,7 @@
         "experience": 0
       },
       {
-        "name": "magic",
+        "name": "arcane",
         "level": 1,
         "experience": 0
       },
@@ -34,6 +34,16 @@
       },
       {
         "name": "botany",
+        "level": 1,
+        "experience": 0
+      },
+      {
+        "name": "industry",
+        "level": 1,
+        "experience": 0
+      },
+      {
+        "name": "taming",
         "level": 1,
         "experience": 0
       }

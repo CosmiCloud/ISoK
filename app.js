@@ -151,6 +151,29 @@ client.on("messageCreate", async (message) => {
     );
   }
 
+  if (command === `trek` && permission === `allow`) {
+    if (!args.length) {
+      return message.channel.send(
+        `You didn't provide an area to trek, ${message.author}!`
+      );
+    }
+
+    trek = await queryTypes.trek();
+    area = args
+    result = await trek
+      .getData(chat_id, username, command,area)
+      .then(async ({ result }) => {
+        return result;
+      })
+      .catch((error) => console.log(`Error : ${error}`));
+
+    await message.channel.send(`${message.author} ${result}`);
+  }else if(command === `trek` && permission === `blocked`){
+    await message.channel.send(
+      `${message.author}, You can only ${command} once a minute.`
+    );
+  }
+
   message.delete();
 });
 

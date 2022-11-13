@@ -86,7 +86,7 @@ module.exports = createAccount = async (chat_id, username) => {
     .run(
       chat_id,
       account.UAL,
-      user_name,
+      username,
       public_key,
       JSON.stringify(data["account"]["knowledge"]),
       JSON.stringify(data["account"]["inventory"]),

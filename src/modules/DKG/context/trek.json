@@ -1,0 +1,11 @@
+{
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "location": "",
+    "eventStatus": "",
+    "items_earned": [],
+    "name": "",
+    "type": "knowledge_check",
+    "knowledge_required": "",
+    "description": "You must have the required knowledge to pass this step."
+}
