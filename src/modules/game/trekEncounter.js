@@ -260,48 +260,57 @@ module.exports = trekEncounter = async (area, row) => {
     for (i = 0; i < steps; ++i) {
         pool_roll = Math.floor(Math.random() * 2010);
         //common
-        if(pool_roll < 600 && pool_roll >= 0){
+        if(pool_roll <= 2010 && pool_roll >= 0){
             trek_step_rarity.push('default')
         }
 
         //common
-        if(pool_roll < 1100 && pool_roll >= 600){
-            trek_step_rarity.push('common')
-        }
+        // if(pool_roll < 1100 && pool_roll >= 600){
+        //     trek_step_rarity.push('common')
+        // }
 
-        //prized
-        if(pool_roll < 1500 && pool_roll >= 1100){
-            trek_step_rarity.push('prized')
-        }
+        // //prized
+        // if(pool_roll < 1500 && pool_roll >= 1100){
+        //     trek_step_rarity.push('prized')
+        // }
 
-        //coveted
-        if(pool_roll < 1800 && pool_roll >= 1500){
-            trek_step_rarity.push('coveted')
-        }
+        // //coveted
+        // if(pool_roll < 1800 && pool_roll >= 1500){
+        //     trek_step_rarity.push('coveted')
+        // }
 
-        //fabled
-        if(pool_roll < 2000 && pool_roll >= 1800){
-            trek_step_rarity.push('fabled')
-        }
+        // //fabled
+        // if(pool_roll < 2000 && pool_roll >= 1800){
+        //     trek_step_rarity.push('fabled')
+        // }
 
-        //ancient
-        if(pool_roll <= 2010 && pool_roll >= 2000){
-            trek_step_rarity.push('ancient')
+        // //ancient
+        // if(pool_roll <= 2010 && pool_roll >= 2000){
+        //     trek_step_rarity.push('ancient')
+        // }
+    }
+
+    console.log(`TREK STEP RARITY ${JSON.stringify(trek_step_rarity)}`)
+    curated_trek_events = []
+    for (i = 0; i < trek_step_rarity.length; ++i) {
+        rarity = trek_step_rarity[i]
+
+        for (i = 0; i < jungle_encounters.length; ++i) {
+            encounter = jungle_encounters[i]
+            if(encounter.rarity == rarity){
+                curated_trek_events.push(encounter)
+            }
         }
     }
 
     trek_events = []
-    for (i = 0; i < trek_step_rarity.length; ++i) {
-        rarity = trek_step_rarity[i]
+    for (i = 0; i < steps; ++i) {
+        pool_roll = Math.floor(Math.random() * steps);
 
-        if (jungle_encounters.filter((e) => e.rarity === rarity).length >0) {
-            trek_roll = Math.floor(Math.random() * jungle_encounters.length);
-            trek_event = jungle_encounters[trek_roll]
-            trek_events.push(trek_event)
-        }
+        trek_events.push(curated_trek_events[pool_roll])
     }
 
-    console.log(`TREK EVENTS ${trek_events}`)
+    console.log(`TREK EVENTS ${JSON.stringify(trek_events)}`)
 
     event_story =''
     for (i = 0; i < trek_events.length; ++i) {
@@ -332,9 +341,6 @@ module.exports = trekEncounter = async (area, row) => {
                     if(!inv_item.account && inv_item.knowledge != 'taming'){
                         inventory[i]["quantity"] =
                         Number(inventory[i]["quantity"]) -1;
-                        break;
-                    }else if(!inv_item.account && inv_item.knowledge != 'taming'){
-                        delete inventory[i]
                         break;
                     }
                 }else{

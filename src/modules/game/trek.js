@@ -56,7 +56,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
         })
         .catch((error) => console.log(`Error : ${error}`));
 
-  if(trekEncounter.event_status == `failure`){
+  if(trekEncounter.trek_status == `failure`){
     return {
         result: trekEncounter.story,
       };
@@ -87,7 +87,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
         "@context": "https://schema.org",
         "@type": "Event",
         "location": area,
-        "eventStatus": event_status,
+        "eventStatus": trek_status,
         "item_earned": item_roll.name,
         "description": trekEncounter.story
     }
