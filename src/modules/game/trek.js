@@ -56,7 +56,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
         })
         .catch((error) => console.log(`Error : ${error}`));
 
-  if(trekEncounter.trek_status == `failure`){
+  if(trekEncounter.trek_status === `failure`){
     return {
         result: trekEncounter.story,
       };
@@ -68,8 +68,6 @@ module.exports = trek = async (chat_id, username, command, area) => {
           return result;
         })
         .catch((error) => console.log(`Error : ${error}`));
-
-  console.log(`${command} Pool: ${pool}`);
   
   inventory = row.inventory
   pool = item_pool.pool
@@ -81,7 +79,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
         })
         .catch((error) => console.log(`Error : ${error}`));
 
-    treks = row.treks 
+    treks = JSON.parse(row.treks)
     data =
     {
         "@context": "https://schema.org",
@@ -100,6 +98,6 @@ module.exports = trek = async (chat_id, username, command, area) => {
     .run(JSON.stringify(treks), chat_id, username);
 
   return {
-    result: ` recieved ${item_roll.quantity} ${item_pool.rarity} ${item_roll.name} from a trek! ${trekEncounter.story}`
+    result: `${trekEncounter.story}. At last you discover ${item_roll.quantity} ${item_pool.rarity} ${item_roll.name} from a trek!`
   };
 };

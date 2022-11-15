@@ -313,47 +313,55 @@ module.exports = trekEncounter = async (area, row) => {
     console.log(`TREK EVENTS ${JSON.stringify(trek_events)}`)
 
     event_story =''
+    trek_history = [];
+    console.log(`EVENT LENGTH: ${trek_events.length}`)
     for (i = 0; i < trek_events.length; ++i) {
         trek_event = trek_events[i]
-
+        console.log(`EVENT TRY: ${i}`)
         if (trek_event.type == 'knowledge_check') {
-            for (i = 0; i < row.knowledge.length; ++i) {
-                knowledge = row.knowledge[i]
+            event_result = trek_event.failed_description
+            for (a = 0; a < row.knowledge.length; ++a) {
+                knowledge = row.knowledge[a]
             
                 if(knowledge.name == trek_event.knowledge_required.name){
                     if(knowledge.level >= trek_event.knowledge_required.level){
+                        trek_history.push(`success`)
                         event_result = trek_event.success_description
-                    }else{
-                        event_result = trek_event.failed_description
                     }
                 }
             }
+            event_story = `${event_story} ${event_result}`
         }
 
-        inventory = row.inventory
+        inventory = JSON.parse(row.inventory)
         if (trek_event.type == 'item_check') {
-            for (i = 0; i < inventory.length; ++i) {
-                inv_item = inventory[i]
+            event_result = trek_event.failed_description
 
-                if (inv_item.name == trek_event.item_required.name) {
-                    trek_status = `success`
+            for (b = 0; b < inventory.length; ++b) {
+                inv_item = inventory[b]
+
+                if (inv_item.name === trek_event.item_required.name) {
+                    trek_history.push(`success`)
                     event_result = trek_event.success_description
                     if(!inv_item.account && inv_item.knowledge != 'taming'){
-                        inventory[i]["quantity"] =
-                        Number(inventory[i]["quantity"]) -1;
-                        break;
+                        inventory[b]["quantity"] =
+                        Number(inventory[b]["quantity"]) -1;
                     }
-                }else{
-                    trek_status = `failure`
-                    event_result = trek_event.failed_description
                 }
             }
+            event_story = `${event_story} ${event_result}`
         }
-
-        event_story = event_story + event_result
     }
 
+    console.log(JSON.stringify(trek_history))
     console.log(event_story)
+
+    if (trek_history.length != steps) {
+        trek_status = 'failure'
+    }else{
+        trek_status = 'success'
+    }
+
   return {
     result: {
         story: event_story,
