@@ -58,7 +58,7 @@ const queryTypes = [
   },
   {
     name: "trekEncounter",
-    getData: () => trekEncounter( area, row),
+    getData: () => trekEncounter(chat_id, username, area, row),
   },
 ];
 

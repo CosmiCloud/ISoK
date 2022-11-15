@@ -50,7 +50,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
   trekEncounter = await queryTypes.trekEncounter();
 
   trekEncounter = await trekEncounter
-        .getData(area, row)
+        .getData(chat_id, username,area, row)
         .then(async ({ result }) => {
           return result;
         })
@@ -58,7 +58,7 @@ module.exports = trek = async (chat_id, username, command, area) => {
 
   if(trekEncounter.trek_status === `failure`){
     return {
-        result: trekEncounter.story,
+        result: `${trekEncounter.story}`,
       };
   }
 
@@ -69,8 +69,9 @@ module.exports = trek = async (chat_id, username, command, area) => {
         })
         .catch((error) => console.log(`Error : ${error}`));
   
-  inventory = row.inventory
+  inventory = JSON.stringify(trekEncounter.inventory)
   pool = item_pool.pool
+  //console.log(`POST TREK INV ${JSON.stringify(inventory)}`)
 
   item_roll = await addItemInventory
         .getData(chat_id,username,pool,inventory)

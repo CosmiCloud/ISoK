@@ -5,7 +5,7 @@ const db = require("better-sqlite3")(process.env.GAME_DB, {
   verbose: console.log,
 });
 
-module.exports = trekEncounter = async (area, row) => {
+module.exports = trekEncounter = async (chat_id, username,area, row) => {
 
   knowledge =  JSON.parse(row.knowledge)
   for (i = 0; i < knowledge.length; ++i) {
@@ -343,13 +343,19 @@ module.exports = trekEncounter = async (area, row) => {
                 if (inv_item.name === trek_event.item_required.name) {
                     trek_history.push(`success`)
                     event_result = trek_event.success_description
-                    if(!inv_item.account && inv_item.knowledge != 'taming'){
+                    if(!inv_item.account && inv_item.knowledge !== 'taming'){
                         inventory[b]["quantity"] =
                         Number(inventory[b]["quantity"]) -1;
 
-                        if(Number(inventory[b]["quantity"]) <= 0){
-                            delete inventory[b]
+                        if(Number(inventory[b]["quantity"]) == 0){
+                            inventory.splice(b, 1)
                         }
+
+                        await db
+                            .prepare(
+                            `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
+                            )
+                            .run(JSON.stringify(inventory), chat_id, username);
                     }
                 }
             }
@@ -369,7 +375,8 @@ module.exports = trekEncounter = async (area, row) => {
   return {
     result: {
         story: event_story,
-        trek_status: trek_status
+        trek_status: trek_status,
+        inventory: inventory
         }
   };
 };
