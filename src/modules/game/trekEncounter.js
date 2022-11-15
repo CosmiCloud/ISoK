@@ -346,6 +346,10 @@ module.exports = trekEncounter = async (area, row) => {
                     if(!inv_item.account && inv_item.knowledge != 'taming'){
                         inventory[b]["quantity"] =
                         Number(inventory[b]["quantity"]) -1;
+
+                        if(Number(inventory[b]["quantity"]) <= 0){
+                            delete inventory[b]
+                        }
                     }
                 }
             }
