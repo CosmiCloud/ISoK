@@ -43,8 +43,6 @@ module.exports = trek = async (chat_id, username, command, area) => {
     };
   }
 
-
-
   itemPool = await queryTypes.itemPool();
   addItemInventory = await queryTypes.addItemInventory();
   trekEncounter = await queryTypes.trekEncounter();
@@ -56,49 +54,102 @@ module.exports = trek = async (chat_id, username, command, area) => {
         })
         .catch((error) => console.log(`Error : ${error}`));
 
-  if(trekEncounter.trek_status === `failure`){
-    return {
-        result: `${trekEncounter.story}`,
-      };
-  }
-
-  item_pool = await itemPool
-        .getData(chat_id,username, command, area)
-        .then(async ({ result }) => {
-          return result;
-        })
-        .catch((error) => console.log(`Error : ${error}`));
   
-  inventory = JSON.stringify(trekEncounter.inventory)
-  pool = item_pool.pool
-  //console.log(`POST TREK INV ${JSON.stringify(inventory)}`)
+  if(trekEncounter.trek_status === `Failed`){
+      treks = JSON.parse(row.treks)
+      data =
+      {
+          "@context": "https://schema.org",
+          "@type": "Event",
+          "location": area,
+          "eventStatus": trek_status,
+          "item_earned": "Nothing!",
+          "Journey": trekEncounter.story
+      }
+      treks.push(data)
 
-  item_roll = await addItemInventory
-        .getData(chat_id,username,pool,inventory)
-        .then(async ({ result }) => {
-          return result;
-        })
-        .catch((error) => console.log(`Error : ${error}`));
+      await db
+          .prepare(
+              `UPDATE user_header set treks = ? WHERE chat_id = ? AND username = ?`
+          )
+          .run(JSON.stringify(treks), chat_id, username);
 
-    treks = JSON.parse(row.treks)
-    data =
-    {
-        "@context": "https://schema.org",
-        "@type": "Event",
-        "location": area,
-        "eventStatus": trek_status,
-        "item_earned": item_roll.name,
-        "description": trekEncounter.story
+      return {
+          result:
+          {
+              story: trekEncounter.story,
+              trek_status: trekEncounter.trek_status
+          }
+      };
     }
-    treks.push(data)
 
-    await db
-    .prepare(
-      `UPDATE user_header set treks = ? WHERE chat_id = ? AND username = ?`
-    )
-    .run(JSON.stringify(treks), chat_id, username);
+    if (trekEncounter.trek_status === `Completed`) {
+        item_pool = await itemPool
+            .getData(chat_id, username, command, area)
+            .then(async ({ result }) => {
+                return result;
+            })
+            .catch((error) => console.log(`Error : ${error}`));
 
-  return {
-    result: `${trekEncounter.story}. At last you discover ${item_roll.quantity} ${item_pool.rarity} ${item_roll.name} from a trek!`
-  };
+        inventory = JSON.stringify(trekEncounter.inventory)
+        pool = item_pool.pool
+        //console.log(`POST TREK INV ${JSON.stringify(inventory)}`)
+
+        item_roll = await addItemInventory
+            .getData(chat_id, username, pool, inventory)
+            .then(async ({ result }) => {
+                return result;
+            })
+            .catch((error) => console.log(`Error : ${error}`));
+
+        treks = JSON.parse(row.treks)
+        data =
+        {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "location": area,
+            "eventStatus": trek_status,
+            "item_earned": item_roll.name,
+            "Journey": trekEncounter.story
+        }
+        treks.push(data)
+
+        if (item_pool.rarity == `common`) {
+            color = `aba7a8`
+        }
+
+        if (item_pool.rarity == `prized`) {
+            color = `3d90f5`
+        }
+
+        if (item_pool.rarity == `coveted`) {
+            color = `21cf35`
+        }
+
+        if (item_pool.rarity == `fabled`) {
+            color = `d90fc1`
+        }
+
+        if (item_pool.rarity == `ancient`) {
+            color = `f2fa0f`
+        }
+
+        await db
+            .prepare(
+                `UPDATE user_header set treks = ? WHERE chat_id = ? AND username = ?`
+            )
+            .run(JSON.stringify(treks), chat_id, username);
+
+        return {
+            result:
+            {
+                story: trekEncounter.story,
+                quantity: item_roll.quantity,
+                rarity: item_pool.rarity,
+                item: item_roll.name,
+                trek_status: trekEncounter.trek_status,
+                color: color
+            }
+        };
+    }
 };

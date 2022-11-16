@@ -367,9 +367,9 @@ module.exports = trekEncounter = async (chat_id, username,area, row) => {
     console.log(event_story)
 
     if (trek_history.length != steps) {
-        trek_status = 'failure'
+        trek_status = 'Failed'
     }else{
-        trek_status = 'success'
+        trek_status = 'Completed'
     }
 
   return {

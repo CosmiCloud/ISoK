@@ -10,6 +10,7 @@ const itemPool = require("../queries/itemPool");
 const explore = require("../modules/game/explore");
 const trek = require("../modules/game/trek");
 const trekEncounter = require("../modules/game/trekEncounter");
+const read = require("../modules/game/read");
 
 const queryTypes = [
   {
@@ -57,9 +58,13 @@ const queryTypes = [
     getData: () => trek(chat_id, username, command, area),
   },
   {
-    name: "trekEncounter",
-    getData: () => trekEncounter(chat_id, username, area, row),
-  },
+   name: "trekEncounter",
+   getData: () => trekEncounter(chat_id, username, area, row),
+   },
+   {
+    name: "read",
+    getData: () => trekEncounter(chat_id, username, knowledge),
+   }
 ];
 
 module.exports = {
@@ -98,5 +103,8 @@ module.exports = {
   },
   trekEncounter: function trekEncounter() {
     return queryTypes[11];
-  },
+   },
+   read: function read() {
+     return queryTypes[12];
+   },
 };

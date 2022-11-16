@@ -148,10 +148,12 @@ client.on("messageCreate", async (message) => {
       })
       .catch((error) => console.log(`Error : ${error}`));
 
-      const exampleEmbed = new EmbedBuilder()
-      .setColor(0x0099FF)
-      .setTitle(`${area} explore complete!`)
-      .setDescription(`${message.author} ${result}`);
+      exampleEmbed = new EmbedBuilder()
+          .setColor(`0x${result.color}`)
+          .setTitle(`Exploration Completed!`)
+          .setDescription(`${message.author} discovered ${result.quantity} ${result.item} from a ${result.rarity} exploration in the ${area}!`)
+          .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+          //.setImage('https://i.imgur.com/AfFp7pu.png');
 
     //await message.channel.send(`${message.author} ${result}`);
     await message.channel.send({ embeds: [exampleEmbed] });
@@ -177,25 +179,29 @@ client.on("messageCreate", async (message) => {
       })
       .catch((error) => console.log(`Error : ${error}`));
 
-      const exampleEmbed = new EmbedBuilder()
-      .setColor(0x0099FF)
-      .setTitle('Some title')
-      .setURL('https://discord.js.org/')
-      .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
-      .setDescription('Some description here')
-      .setThumbnail('https://i.imgur.com/AfFp7pu.png')
-      .addFields(
-        { name: 'Regular field title', value: 'Some value here' },
-        { name: '\u200B', value: '\u200B' },
-        { name: 'Inline field title', value: 'Some value here', inline: true },
-        { name: 'Inline field title', value: 'Some value here', inline: true },
-      )
-      .addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
-      .setImage('https://i.imgur.com/AfFp7pu.png')
-      .setTimestamp()
-      .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' });  
+      if (result.trek_status === 'Failed') {
+          exampleEmbed = new EmbedBuilder()
+              .setColor(`0xe01b46`)
+              .setTitle('Trek Failed!')
+              .setDescription('You failed to complete your trek due to knowledge or item requirements')
+              .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+              .addFields(
+                  { name: 'Journey', value: `${trekEncounter.story}` }
+              );
+      }
 
-    await message.channel.send(`${message.author} ${result}`);
+      if (result.trek_status === 'Completed') {
+          exampleEmbed = new EmbedBuilder()
+              .setColor(`0x${result.color}`)
+              .setTitle('Trek Completed!')
+              .setDescription(`${message.author} At last you discover ${result.quantity} ${result.rarity} ${result.item} from a trek!`)
+              .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+              .addFields(
+                  { name: 'Journey', value: `${trekEncounter.story}` }
+              );
+      }
+
+      await message.channel.send({ embeds: [exampleEmbed] });
   }else if(command === `trek` && permission === `blocked`){
     await message.channel.send(
       `${message.author}, You can only ${command} once a minute.`

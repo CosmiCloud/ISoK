@@ -58,6 +58,8 @@ module.exports = addItemInventory = async (chat_id,username,pool,inventory) => {
     return {
       result: {
         name:item.name,
-        quantity: item.quantity}
+        quantity: item.quantity,
+        description: item.description
+        }
     };
 }

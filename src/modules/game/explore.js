@@ -65,7 +65,34 @@ module.exports = explore = async (chat_id, username, command, area) => {
         })
         .catch((error) => console.log(`Error : ${error}`));
 
+    if (item_pool.rarity == `common`) {
+        color = `aba7a8`
+    }
+
+    if (item_pool.rarity == `prized`) {
+        color = `3d90f5`
+    }
+
+    if (item_pool.rarity == `coveted`) {
+        color = `21cf35`
+    }
+
+    if (item_pool.rarity == `fabled`) {
+        color = `d90fc1`
+    }
+
+    if (item_pool.rarity == `ancient`) {
+        color = `f2fa0f`
+    }
+
   return {
-    result: ` recieved ${item_roll.quantity} ${item_roll.name} on a ${item_pool.rarity} exploration!`
+      result:
+          {
+              quantity: item_roll.quantity,
+              item: item_roll.name,
+              rarity: item_pool.rarity,
+              color: color,
+              description: item_roll.description
+          }
   };
 };
