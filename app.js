@@ -4,7 +4,7 @@ const db = require("better-sqlite3")(process.env.GAME_DB, {
   verbose: console.log,
 });
 
-const { REST, Routes, Client, GatewayIntentBits, Partials } = require("discord.js");
+const { REST, Routes, Client, GatewayIntentBits, Partials, EmbedBuilder } = require("discord.js");
 const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
 
 const client = new Client({
@@ -148,7 +148,13 @@ client.on("messageCreate", async (message) => {
       })
       .catch((error) => console.log(`Error : ${error}`));
 
-    await message.channel.send(`${message.author} ${result}`);
+      const exampleEmbed = new EmbedBuilder()
+      .setColor(0x0099FF)
+      .setTitle(`${area} explore complete!`)
+      .setDescription(`${message.author} ${result}`);
+
+    //await message.channel.send(`${message.author} ${result}`);
+    await message.channel.send({ embeds: [exampleEmbed] });
   }else if(command === `explore` && permission === `blocked`){
     await message.channel.send(
       `${message.author}, You can only ${command} once a minute.`
@@ -170,6 +176,24 @@ client.on("messageCreate", async (message) => {
         return result;
       })
       .catch((error) => console.log(`Error : ${error}`));
+
+      const exampleEmbed = new EmbedBuilder()
+      .setColor(0x0099FF)
+      .setTitle('Some title')
+      .setURL('https://discord.js.org/')
+      .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
+      .setDescription('Some description here')
+      .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+      .addFields(
+        { name: 'Regular field title', value: 'Some value here' },
+        { name: '\u200B', value: '\u200B' },
+        { name: 'Inline field title', value: 'Some value here', inline: true },
+        { name: 'Inline field title', value: 'Some value here', inline: true },
+      )
+      .addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
+      .setImage('https://i.imgur.com/AfFp7pu.png')
+      .setTimestamp()
+      .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' });  
 
     await message.channel.send(`${message.author} ${result}`);
   }else if(command === `trek` && permission === `blocked`){
