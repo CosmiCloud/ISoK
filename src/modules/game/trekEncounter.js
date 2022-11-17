@@ -324,9 +324,11 @@ module.exports = trekEncounter = async (chat_id, username,area, row) => {
                 knowledge = row.knowledge[a]
             
                 if(knowledge.name == trek_event.knowledge_required.name){
-                    if(knowledge.level >= trek_event.knowledge_required.level){
+                    if (knowledge.level >= trek_event.knowledge_required.level) {
                         trek_history.push(`success`)
                         event_result = trek_event.success_description
+                    } else {
+                        i = trek_events.length
                     }
                 }
             }
@@ -343,19 +345,23 @@ module.exports = trekEncounter = async (chat_id, username,area, row) => {
                 if (inv_item.name === trek_event.item_required.name) {
                     trek_history.push(`success`)
                     event_result = trek_event.success_description
-                    if(!inv_item.account && inv_item.knowledge !== 'taming'){
-                        inventory[b]["quantity"] =
-                        Number(inventory[b]["quantity"]) -1;
+                    if (!inv_item.account && inv_item.knowledge !== 'taming') {
+                        inventory[b]["quantity"] = Number(inventory[b]["quantity"]) - 1;
 
-                        if(Number(inventory[b]["quantity"]) == 0){
+                        if (Number(inventory[b]["quantity"]) == 0) {
                             inventory.splice(b, 1)
                         }
 
                         await db
                             .prepare(
-                            `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
+                                `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
                             )
                             .run(JSON.stringify(inventory), chat_id, username);
+                    }
+                    break;
+                } else {
+                    if (b == inventory.length - 1) { 
+                        i = trek_events.length
                     }
                 }
             }

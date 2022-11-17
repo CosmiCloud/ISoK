@@ -95,7 +95,7 @@ module.exports = itemPool = async (chat_id,username, command, area) => {
       rarity = `ancient`
       pool.push({name: "ancient_coin",quantity: 15})
       pool.push({name: "dynomite",quantity: 1})
-      pool.push({name: "compass",quantity: 1})
+      pool.push({name: "old_compass",quantity: 1})
       pool.push({name: "pestle_and_mortar",quantity: 1})
       pool.push({name: "jaguar",quantity: 1})
     }

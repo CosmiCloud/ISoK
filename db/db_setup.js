@@ -12,6 +12,7 @@ const command_list = [
   "save",
   "explore",
   "trek",
+  "read"
 
 ];
 

@@ -33,15 +33,15 @@ module.exports = spamCheck = async (command) => {
       cooldown = Number(process.env.MINTING_COOLDOWN) * 60 * 1000;
     }
 
-    if (command == "mining") {
-      cooldown = Number(process.env.MINING_COOLDOWN) * 60 * 1000;
+    if (command == "explore") {
+      cooldown = Number(process.env.EXPLORE_COOLDOWN) * 60 * 1000;
     }
 
-    if (command == "woodcutting") {
-      cooldown = Number(process.env.MINING_COOLDOWN) * 60 * 1000;
+    if (command == "trek") {
+      cooldown = Number(process.env.TREK_COOLDOWN) * 60 * 1000;
     }
-    if (command == "fishing") {
-      cooldown = Number(process.env.MINING_COOLDOWN) * 60 * 1000;
+    if (command == "read") {
+      cooldown = Number(process.env.READ_COOLDOWN) * 60 * 1000;
     }
 
     if (timeDif > cooldown) {

@@ -66,9 +66,9 @@ client.on("messageCreate", async (message) => {
   }
 
   if (command === `mintitem` && permission === `allow`) {
-    if (!args.length) {
+      if (args.length != 1) {
       return message.channel.send(
-        `You didn't provide an item name, ${message.author}!`
+        `You didn't provide 1 item name, ${message.author}!`
       );
     }
 
@@ -133,9 +133,9 @@ client.on("messageCreate", async (message) => {
   }
 
   if (command === `explore` && permission === `allow`) {
-    if (!args.length) {
+      if (args.length != 1) {
       return message.channel.send(
-        `You didn't provide an area to explore, ${message.author}!`
+        `You didn't provide 1 area to explore, ${message.author}!`
       );
     }
 
@@ -164,9 +164,9 @@ client.on("messageCreate", async (message) => {
   }
 
   if (command === `trek` && permission === `allow`) {
-    if (!args.length) {
+      if (args.length != 1) {
       return message.channel.send(
-        `You didn't provide an area to trek, ${message.author}!`
+        `You didn't provide 1 area to trek, ${message.author}!`
       );
     }
 
@@ -206,7 +206,42 @@ client.on("messageCreate", async (message) => {
     await message.channel.send(
       `${message.author}, You can only ${command} once a minute.`
     );
-  }
+    }
+
+    if (command === `read` && permission === `allow`) {
+        if (args.length != 1) {
+            return message.channel.send(
+                `You didn't provide 1 knowledge focus to read, ${message.author}!`
+            );
+        }
+
+        read = await queryTypes.read();
+        knowledge = args[0]
+
+        result = await read
+            .getData(chat_id, username, knowledge)
+            .then(async ({ result }) => {
+                return result;
+            })
+            .catch((error) => console.log(`Error : ${error}`));
+
+        if (result.knowledge) {
+            exampleEmbed = new EmbedBuilder()
+                .setColor(`0x17e34d`)
+                .setTitle('Knowledge Gained!')
+                .setDescription(`${message.author} read a ${result.book} for ${result.book_xp} xp in ${result.knowledge}!`)
+                .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+                .addFields(
+                    { name: `${result.knowledge} knowledge level:`, value: `${result.level}` }
+                );
+        } else {
+            return message.channel.send(
+                `${result.message}, ${message.author}!`
+            );
+        }
+
+        await message.channel.send({ embeds: [exampleEmbed] });
+    }
 
   message.delete();
 });

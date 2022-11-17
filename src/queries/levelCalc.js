@@ -1,5 +1,5 @@
 module.exports = levelCalc = async (experience) => {
-  if (experience > 83) {
+  if (experience > 0) {
      level = 1
   }
   if (experience > 174) {
