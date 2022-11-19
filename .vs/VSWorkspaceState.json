@@ -1,7 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\db",
+    "\\src",
+    "\\src\\modules",
+    "\\src\\modules\\control",
+    "\\src\\modules\\game",
+    "\\src\\queries",
+    "\\src\\util"
   ],
-  "SelectedNode": "\\C:\\Users\\branhamt\\Source\\Repos\\ISoK",
+  "SelectedNode": "\\src\\modules\\game\\trekEncounter.js",
   "PreviewInSolutionExplorer": false
 }
