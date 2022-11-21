@@ -152,7 +152,6 @@ client.on("messageCreate", async (message) => {
           .setColor(`0x${result.color}`)
           .setTitle(`Exploration Completed!`)
           .setDescription(`${message.author} discovered ${result.quantity} ${result.item} from a ${result.rarity} exploration in the ${area}!`)
-          .setThumbnail('https://i.imgur.com/AfFp7pu.png')
           //.setImage('https://i.imgur.com/AfFp7pu.png');
 
     //await message.channel.send(`${message.author} ${result}`);
@@ -184,7 +183,6 @@ client.on("messageCreate", async (message) => {
               .setColor(`0xe01b46`)
               .setTitle('Trek Failed!')
               .setDescription('You failed to complete your trek due to knowledge or item requirements')
-              .setThumbnail('https://i.imgur.com/AfFp7pu.png')
               .addFields(
                   { name: 'Journey', value: `${trekEncounter.story}` }
               );
@@ -195,7 +193,6 @@ client.on("messageCreate", async (message) => {
               .setColor(`0x${result.color}`)
               .setTitle('Trek Completed!')
               .setDescription(`${message.author} At last you discover ${result.quantity} ${result.rarity} ${result.item} from a trek!`)
-              .setThumbnail('https://i.imgur.com/AfFp7pu.png')
               .addFields(
                   { name: 'Journey', value: `${trekEncounter.story}` }
               );
@@ -209,17 +206,18 @@ client.on("messageCreate", async (message) => {
     }
 
     if (command === `read` && permission === `allow`) {
-        if (args.length != 1) {
+        if (args.length != 2) {
             return message.channel.send(
-                `You didn't provide 1 knowledge focus to read, ${message.author}!`
+                `You didn't provide 1 book and 1 knowledge focus to read, ${message.author}!`
             );
         }
 
         read = await queryTypes.read();
-        knowledge = args[0]
+        book_type = args[0]
+        knowledge = args[1]
 
         result = await read
-            .getData(chat_id, username, knowledge)
+            .getData(chat_id, username, book_type, knowledge)
             .then(async ({ result }) => {
                 return result;
             })
@@ -230,7 +228,6 @@ client.on("messageCreate", async (message) => {
                 .setColor(`0x17e34d`)
                 .setTitle('Knowledge Gained!')
                 .setDescription(`${message.author} read a ${result.book} for ${result.book_xp} xp in ${result.knowledge}!`)
-                .setThumbnail('https://i.imgur.com/AfFp7pu.png')
                 .addFields(
                     { name: `${result.knowledge} knowledge level:`, value: `${result.level}` }
                 );

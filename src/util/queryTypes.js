@@ -63,7 +63,7 @@ const queryTypes = [
    },
    {
     name: "read",
-    getData: () => read(chat_id, username, knowledge),
+    getData: () => read(chat_id, username, book_type, knowledge),
    }
 ];
 

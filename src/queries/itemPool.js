@@ -78,7 +78,7 @@ module.exports = itemPool = async (chat_id,username, command, area) => {
       rarity = `coveted`
       pool.push({name: "ancient_coin",quantity: 5})
       pool.push({name: "dynomite",quantity: 1})
-      pool.push({name: "compass",quantity: 1})
+      pool.push({name: "old_compass",quantity: 1})
     }
 
     //fabled
@@ -86,7 +86,7 @@ module.exports = itemPool = async (chat_id,username, command, area) => {
       rarity = `fabled`
       pool.push({name: "ancient_coin",quantity: 10})
       pool.push({name: "dynomite",quantity: 1})
-      pool.push({name: "compass",quantity: 1})
+      pool.push({name: "old_compass",quantity: 1})
       pool.push({name: "pestle_and_mortar",quantity: 1})
     }
 

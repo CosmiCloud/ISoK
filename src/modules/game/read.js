@@ -5,7 +5,7 @@ const db = require("better-sqlite3")(process.env.GAME_DB, {
     verbose: console.log,
 });
 
-module.exports = read = async (chat_id, username, knowledge) => {
+module.exports = read = async (chat_id, username, book_type, knowledge) => {
     const queryTypes = require("../../util/queryTypes");
     //check if user exists
     row = await db
@@ -44,40 +44,29 @@ module.exports = read = async (chat_id, username, knowledge) => {
     multiplier = 0
     for (i = 0; i < inventory.length; ++i) {
         inv_item = inventory[i];
-        if (inv_item.name == `tattered_book_of_knowledge` && !inv_item.account) {
-            book = `tattered_book_of_knowledge`
-            multiplier = 50
-            inventory[i]["quantity"] = Number(inventory[i]["quantity"]) - 1;
+        if (inv_item.name == book_type) {
 
-            if (Number(inventory[i]["quantity"]) == 0) {
-                inventory.splice(i, 1)
+            if(book_type == `tattered_book_of_knowledge`){
+                multiplier = 50
             }
-            i = inventory.length
-        }
 
-        if (inv_item.name == `tattered_book_of_knowledge` && inv_item.account) {
-            book = `tattered_book_of_knowledge`
-            multiplier = 50
-            inventory.splice(i, 1)
-            i = inventory.length
-        }
-
-        if (inv_item.name == `book_of_knowledge` && !inv_item.account) {
-            book = `book_of_knowledge`
-            multiplier = 100
-            inventory[i]["quantity"] = Number(inventory[i]["quantity"]) - 1;
-
-            if (Number(inventory[i]["quantity"]) == 0) {
-                inventory.splice(i, 1)
+            if(book_type == `book_of_knowledge`){
+                multiplier = 100
             }
-            i = inventory.length
-        }
 
-        if (inv_item.name == `book_of_knowledge` && inv_item.account) {
-            book = `book_of_knowledge`
-            multiplier = 100
-            inventory.splice(i, 1)
-            i = inventory.length
+            if(!inv_item.account){
+                inventory[i]["quantity"] = Number(inventory[i]["quantity"]) - 1;
+
+                if (Number(inventory[i]["quantity"]) == 0) {
+                    inventory.splice(i, 1)
+                }
+                i = inventory.length
+            }
+
+            if(inv_item.account){
+                inventory.splice(i, 1)
+                i = inventory.length
+            }
         }
     }
 
@@ -93,6 +82,7 @@ module.exports = read = async (chat_id, username, knowledge) => {
     book_xp = level * multiplier
     levelCalc = await queryTypes.levelCalc();
     total_xp = xp + book_xp;
+    level_up = `no`
 
     for (i = 0; i < knowledge_list.length; ++i) {
         cur_knowledge = knowledge_list[i];
@@ -107,6 +97,10 @@ module.exports = read = async (chat_id, username, knowledge) => {
                     return result;
                 })
                 .catch((error) => console.log(`Error : ${error}`));
+            
+            if(old_level < level){
+                 level_up = `yes`
+            }
         }
 
         if (cur_knowledge.name == "total") {
@@ -119,6 +113,10 @@ module.exports = read = async (chat_id, username, knowledge) => {
     knowledge_list[knowledge_index].level = level;
     knowledge_list[total_index].experience = Number(knowledge_list[total_index].experience) + book_xp
 
+    if(level_up == `yes`){
+        knowledge_list[total_index].level = Number(knowledge_list[total_index].level) + 1
+    }
+
     await db
         .prepare(
             `UPDATE user_header set inventory = ?,knowledge = ? WHERE chat_id = ? AND username = ?`
@@ -130,7 +128,7 @@ module.exports = read = async (chat_id, username, knowledge) => {
             knowledge: knowledge,
             level: level,
             book_xp: book_xp,
-            book: book
+            book: book_type
             }
     };
 };

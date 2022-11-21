@@ -46,6 +46,11 @@
         "name": "taming",
         "level": 1,
         "experience": 0
+      },
+      {
+        "name": "explosives",
+        "level": 1,
+        "experience": 0
       }
     ],
     "inventory": [
