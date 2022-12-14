@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
+const ethers = require("ethers");
 const db = require("better-sqlite3")(process.env.GAME_DB, {
   verbose: console.log,
 });
@@ -52,24 +53,25 @@ module.exports = saveAccount = async (chat_id, username) => {
 
   console.log(`Updating UAL: ${row.ual}`);
   console.log(`Saving Data: ${JSON.stringify(data)}`);
-  dkg_update_result = await dkg.asset
-    .update(row.ual, data, {
-      visibility: "public",
-      keywords: keywords,
-      holdingTimeInYears: 1,
-      tokenAmount: 1,
-      blockchain: {
-        name: "otp",
-        publicKey: public_key,
-        privateKey: private_key,
-      },
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // dkg_update_result = await dkg.asset
+  //   .update(row.ual, data, {
+  //     keywords: keywords,
+  //     epochsNum: 2,
+  //     maxNumberOfRetries: 30,
+  //     frequency: 1,
+  //     tokenAmount: ethers.utils.parseEther(process.env.TRAC_PAYMENT),
+  //     blockchain: {
+  //       name: process.env.DKG_NETWORK,
+  //       publicKey: public_key,
+  //       privateKey: private_key,
+  //     },
+  //   })
+  //   .then((result) => {
+  //     return result;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 
   if (!dkg_update_result) {
     result = `SAVE REQUEST FAILED: The DKG node encounted an error while interacting with the blockchain. Please try again later.`;

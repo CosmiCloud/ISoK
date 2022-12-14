@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
+const ethers = require("ethers");
 const db = require("better-sqlite3")(process.env.GAME_DB, {
   verbose: console.log,
 });
@@ -48,12 +49,13 @@ module.exports = createAccount = async (chat_id, username) => {
   console.log(`Creating account UAL with ` + JSON.stringify(data));
   account = await dkg.asset
     .create(data, {
-      visibility: "public",
       keywords: keywords,
-      holdingTimeInYears: 1,
-      tokenAmount: 1,
+      epochsNum: 100,
+      maxNumberOfRetries: 30,
+      frequency: 1,
+      tokenAmount: ethers.utils.parseEther(process.env.TRAC_PAYMENT),
       blockchain: {
-        name: "otp",
+        name: process.env.DKG_NETWORK,
         publicKey: public_key,
         privateKey: private_key,
       },

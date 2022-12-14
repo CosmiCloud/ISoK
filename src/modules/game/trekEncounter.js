@@ -549,14 +549,14 @@ module.exports = trekEncounter = async (chat_id, username,area, row) => {
                         if (Number(inventory[b]["quantity"]) == 0) {
                             inventory.splice(b, 1)
                         }
-
-                        await db
-                            .prepare(
-                                `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
-                            )
-                            .run(JSON.stringify(inventory), chat_id, username);
                     }
                     
+                    await db
+                        .prepare(
+                            `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
+                        )
+                        .run(JSON.stringify(inventory), chat_id, username);
+
                     b = inventory.length
                 }
             }

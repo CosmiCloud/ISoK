@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
+const ethers = require("ethers");
 const db = require("better-sqlite3")(process.env.GAME_DB, {
   verbose: console.log,
 });
@@ -79,12 +80,13 @@ module.exports = mintItem = async (chat_id, username, args) => {
       console.log(`CREATING ITEM: ` + JSON.stringify(item_data));
       item_asset = await dkg.asset
         .create(item_data, {
-          visibility: "public",
           keywords: keywords,
-          holdingTimeInYears: 1,
-          tokenAmount: 1,
+          epochsNum: 2,
+          maxNumberOfRetries: 30,
+          frequency: 1,
+          tokenAmount: ethers.utils.parseEther(process.env.TRAC_PAYMENT),
           blockchain: {
-            name: "otp",
+            name: process.env.DKG_NETWORK,
             publicKey: public_key,
             privateKey: private_key,
           },
@@ -138,24 +140,24 @@ module.exports = mintItem = async (chat_id, username, args) => {
 
   console.log(`Updating UAL: ${row.ual}`);
   console.log(`Saving Data: ${JSON.stringify(account_data)}`);
-  dkg_update_result = await dkg.asset
-    .update(row.ual, account_data, {
-      visibility: "public",
-      keywords: keywords,
-      holdingTimeInYears: 1,
-      tokenAmount: 1,
-      blockchain: {
-        name: "otp",
-        publicKey: public_key,
-        privateKey: private_key,
-      },
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // dkg_update_result = await dkg.asset
+  //   .update(row.ual, account_data, {
+  //     keywords: keywords,
+  //     epochsNum: 2,
+  //     maxNumberOfRetries: 30,
+  //     frequency: 1,
+  //     blockchain: {
+  //       name: process.env.DKG_NETWORK,
+  //       publicKey: public_key,
+  //       privateKey: private_key,
+  //     },
+  //   })
+  //   .then((result) => {
+  //     return result;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 
   await db
     .prepare(

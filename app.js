@@ -5,6 +5,7 @@ const db = require("better-sqlite3")(process.env.GAME_DB, {
 });
 
 const { REST, Routes, Client, GatewayIntentBits, Partials, EmbedBuilder } = require("discord.js");
+const { result } = require("underscore");
 const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
 
 const client = new Client({
@@ -141,21 +142,24 @@ client.on("messageCreate", async (message) => {
 
     explore = await queryTypes.explore();
     area = args
-    result = await explore
+    explore_result = await explore
       .getData(chat_id, username, command,area)
       .then(async ({ result }) => {
         return result;
       })
       .catch((error) => console.log(`Error : ${error}`));
 
+    if(explore_result.rarity){
       exampleEmbed = new EmbedBuilder()
-          .setColor(`0x${result.color}`)
+          .setColor(`0x${explore_result.color}`)
           .setTitle(`Exploration Completed!`)
-          .setDescription(`${message.author} discovered ${result.quantity} ${result.item} from a ${result.rarity} exploration in the ${area}!`)
+          .setDescription(`${message.author} discovered ${explore_result.quantity} ${explore_result.item} from a ${explore_result.rarity} exploration in the ${area}!`)
           //.setImage('https://i.imgur.com/AfFp7pu.png');
-
-    //await message.channel.send(`${message.author} ${result}`);
-    await message.channel.send({ embeds: [exampleEmbed] });
+          
+        await message.channel.send({ embeds: [exampleEmbed] });
+    }else{
+      await message.channel.send(explore_result);
+    }
   }else if(command === `explore` && permission === `blocked`){
     await message.channel.send(
       `${message.author}, You can only ${command} once a minute.`
