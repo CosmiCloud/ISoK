@@ -2,6 +2,7 @@
   "dependencies": {
     "better-sqlite3": "^7.6.2",
     "discord.js": "^14.6.0",
+    "dkg.js": "^6.0.0-beta.3.5.1",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "fs": "^0.0.1-security",
