@@ -50,7 +50,7 @@ module.exports = createAccount = async (chat_id, username) => {
   account = await dkg.asset
     .create(data, {
       keywords: keywords,
-      epochsNum: 100,
+      epochsNum: 200,
       maxNumberOfRetries: 30,
       frequency: 1,
       tokenAmount: ethers.utils.parseEther(process.env.TRAC_PAYMENT),
