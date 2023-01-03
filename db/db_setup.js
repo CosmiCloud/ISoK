@@ -19,7 +19,7 @@ const command_list = [
 async function build_db() {
   try {
     await db.exec(
-      "CREATE TABLE IF NOT EXISTS user_header (chat_id VARCHAR PRIMARY KEY NOT NULL, ual VARCHAR, username VARCHAR, owner VARCHAR, knowledge VARCHAR, inventory VARCHAR, explores VARCHAR, treks VARCHAR)"
+      "CREATE TABLE IF NOT EXISTS player_header (owner_address VARCHAR PRIMARY KEY NOT NULL, ual VARCHAR, username VARCHAR, chat_id VARCHAR, knowledge VARCHAR, inventory VARCHAR, explores VARCHAR, treks VARCHAR)"
     );
     await db.exec(
       "CREATE TABLE IF NOT EXISTS command_history (command VARCHAR PRIMARY KEY NOT NULL, date_last_used DATE)"

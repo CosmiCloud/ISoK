@@ -15,9 +15,9 @@ const node_options = {
 };
 const dkg = new DKGClient(node_options);
 
-module.exports = createAccount = async (chat_id, username) => {
+module.exports = createAccount = async (chat_id, username, public_key) => {
   const row = await db
-    .prepare("SELECT ual FROM user_header WHERE chat_id = ? AND username = ?")
+    .prepare("SELECT ual FROM player_header WHERE chat_id = ? AND username = ?")
     .get(chat_id, username);
 
   if (row) {
@@ -29,9 +29,8 @@ module.exports = createAccount = async (chat_id, username) => {
   data = fs.readFileSync(`${__dirname}/context/account.json`, "utf8");
   data = JSON.parse(data);
 
-  public_key = "";
-  private_key = "";
-  if (!public_key || !private_key) {
+  let private_key;
+  if (!public_key) {
     public_key = process.env.DEFAULT_PUBLIC_KEY;
     private_key = process.env.DEFAULT_PRIVATE_KEY;
   }
@@ -46,42 +45,38 @@ module.exports = createAccount = async (chat_id, username) => {
   keywords.push(username)
   keywords.push(public_key)
 
-  console.log(`Creating account UAL with ` + JSON.stringify(data));
-  account = await dkg.asset
-    .create(data, {
-      keywords: keywords,
-      epochsNum: 200,
-      maxNumberOfRetries: 30,
-      frequency: 1,
-      tokenAmount: ethers.utils.parseEther(process.env.TRAC_PAYMENT),
-      blockchain: {
-        name: process.env.DKG_NETWORK,
-        publicKey: public_key,
-        privateKey: private_key,
-      },
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  timestamp = new Date();
+  abs_timestamp = Math.abs(timestamp);
 
-  if (!account) {
+  user = await blockheart_db
+    .prepare(
+      "SELECT * FROM player_header WHERE owner_address = ?"
+    )
+    .all(public_key);
+
+  if(!user){
     return {
-      result: `ACCOUNT CREATION FAILED: The DKG node encounted a transaction error while interacting with the blockchain. Please try again.`,
+      result: `ACCOUNT CREATION FAILED: You already have a UAL for this discord account: ${row.ual}`,
     };
   }
 
-  if (account.operation.errorMessage) {
-    console.log(account.operation.errorMessage);
-    return {
-      result: `ACCOUNT CREATION FAILED: The DKG node encountered an error while interacting with the knowledge graph. Please try again.`,
-    };
-  }
-
-  console.log(account);
-  console.log(`Created Account UAL: ${account.UAL}!`);
+  await blockheart_db
+        .prepare("INSERT INTO txn_header (owner_address, action, type, keywords, timestamp, ual, assertionId, operationId, status, data, otp_fee, trac_fee, epochs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        .run([
+          user[0].owner_address,
+          "publish",
+          "api",
+          keywords,
+          abs_timestamp,
+          null,
+          null,
+          null,
+          'Pending',
+          assetData,
+          otp_fee,
+          trac_fee,
+          epochs
+        ]);
 
   await db
     .prepare(`REPLACE INTO user_header VALUES (?,?,?,?,?,?,?,?)`)

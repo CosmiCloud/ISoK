@@ -53,11 +53,16 @@ client.on("messageCreate", async (message) => {
   }
 
   if (command === `createaccount` && permission === `allow`) {
+    if (args.length != 1) {
+      return message.channel.send(
+        `You didn't provide a public key needed to create your account, ${message.author}!`
+      );
+    }
     await message.channel.send(`${message.author}, Attempting to create your account... I will DM you the transaction to sign if everything goes well.`);
     
     createAccount = await queryTypes.createAccount();
     account = await createAccount
-        .getData(chat_id, username)
+        .getData(chat_id, username, public_key)
         .then(async ({ result }) => {
           return result;
         })
