@@ -2,7 +2,7 @@ require("dotenv").config();
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const sqlite3 = require("sqlite3");
-const db = new sqlite3.Database("/Users/Tyler/ISoK/db/isok.db");
+const db = new sqlite3.Database("C:/Users/Tyler/ISoK/db/isok.db");
 const command_list = [
   //alphabetical
   "createaccount",
