@@ -51,7 +51,7 @@ module.exports = createAccount = async (chat_id, username, public_key) => {
   keywords.push(username)
   keywords.push(public_key)
 
-  epochs = 200
+  epochs = '200'
 
   timestamp = new Date();
   abs_timestamp = Math.abs(timestamp);
@@ -59,35 +59,22 @@ module.exports = createAccount = async (chat_id, username, public_key) => {
   await blockheart_db
         .prepare("INSERT INTO txn_header (owner_address, action, type, keywords, timestamp, ual, assertionId, operationId, status, data, otp_fee, trac_fee, epochs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .run([
-          public_key,
-          "publish",
+          JSON.stringify(public_key),
+          "isok",
           "account creation",
-          keywords,
-          abs_timestamp,
-          null,
-          null,
-          null,
-          'Pending',
+          JSON.stringify(keywords),
+          JSON.stringify(abs_timestamp),
+          "null",
+          "null",
+          "null",
+          "Pending",
           JSON.stringify(assetData),
-          null,
-          null,
-          epochs
+          "null",
+          "null",
+          JSON.stringify(epochs)
         ]);
 
-  // await db
-  //   .prepare(`REPLACE INTO player_header VALUES (?,?,?,?,?,?,?,?)`)
-  //   .run(
-  //     chat_id,
-  //     account.UAL,
-  //     username,
-  //     public_key,
-  //     JSON.stringify(data["account"]["knowledge"]),
-  //     JSON.stringify(data["account"]["inventory"]),
-  //     JSON.stringify(data["account"]["explores"]),
-  //     JSON.stringify(data["account"]["treks"])
-  //   );
-
   return {
-    result: `ACCOUNT CREATION QUEUED: Account creation has been queued, please sign the transaction found here to take ownership: ${process.env.HOSTSITE}/isok/account?owner_address=${public_key}`,
+    result: `ACCOUNT CREATION QUEUED: Account creation has been queued, please sign the transaction found here to take ownership: ${process.env.HOSTSITE}/isok/isokTransactions?owner_address=${public_key}`,
   };
 };

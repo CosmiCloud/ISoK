@@ -23,7 +23,7 @@ const queryTypes = [
   },
   {
     name: "createAccount",
-    getData: () => createAccount(chat_id, username),
+    getData: () => createAccount(chat_id, username, public_key),
   },
   {
     name: "saveAccount",

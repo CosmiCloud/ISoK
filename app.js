@@ -60,9 +60,10 @@ client.on("messageCreate", async (message) => {
     }
     await message.channel.send(`${message.author}, Attempting to create your account... I will DM you the transaction to sign if everything goes well.`);
     
+    public_key = args
     createAccount = await queryTypes.createAccount();
     account = await createAccount
-        .getData(chat_id, username, public_key)
+        .getData(chat_id, username, args)
         .then(async ({ result }) => {
           return result;
         })
