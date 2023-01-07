@@ -43,13 +43,9 @@ module.exports = createAccount = async (chat_id, username, public_key) => {
 
   assetData["account"]["chat_id"] = chat_id;
   assetData["account"]["name"] = username;
-  assetData["account"]["owner"] = public_key;
+  assetData["account"]["owner"] = public_key[0];
 
-  keywords = [];
-  keywords.push("in_search_of_knowledge")
-  keywords.push(chat_id)
-  keywords.push(username)
-  keywords.push(public_key)
+  keywords = `in search of knowledge,${chat_id},${username},${public_key[0]}`
 
   epochs = '200'
 
@@ -59,19 +55,19 @@ module.exports = createAccount = async (chat_id, username, public_key) => {
   await blockheart_db
         .prepare("INSERT INTO txn_header (owner_address, action, type, keywords, timestamp, ual, assertionId, operationId, status, data, otp_fee, trac_fee, epochs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .run([
-          JSON.stringify(public_key),
+          public_key[0],
           "isok",
           "account creation",
-          JSON.stringify(keywords),
-          JSON.stringify(abs_timestamp),
-          "null",
-          "null",
-          "null",
+          keywords,
+          abs_timestamp,
+          null,
+          null,
+          null,
           "Pending",
           JSON.stringify(assetData),
-          "null",
-          "null",
-          JSON.stringify(epochs)
+          null,
+          null,
+          epochs
         ]);
 
   return {

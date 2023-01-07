@@ -17,7 +17,7 @@ const dkg = new DKGClient(node_options);
 
 module.exports = saveAccount = async (chat_id, username) => {
   const row = await db
-    .prepare("SELECT * FROM user_header WHERE chat_id = ? AND username = ?")
+    .prepare("SELECT * FROM player_header WHERE chat_id = ? AND username = ?")
     .get(chat_id, username);
 
   if (!row) {

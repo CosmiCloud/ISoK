@@ -17,7 +17,7 @@ const dkg = new DKGClient(node_options);
 
 module.exports = saveAccount = async (chat_id, username,args) => {
     const row = await db
-    .prepare("SELECT * FROM user_header WHERE chat_id = ? AND username = ?")
+    .prepare("SELECT * FROM player_header WHERE chat_id = ? AND username = ?")
     .get(chat_id, username);
 
     if (row) {
@@ -229,7 +229,7 @@ module.exports = saveAccount = async (chat_id, username,args) => {
 
   await db
     .prepare(
-      `REPLACE INTO user_header (chat_id, ual, username, owner, knowledge, inventory, explores, treks)
+      `REPLACE INTO player_header (chat_id, ual, username, owner, knowledge, inventory, explores, treks)
       VALUES(?,?,?,?,?,?,?,?)`
     )
     .run(

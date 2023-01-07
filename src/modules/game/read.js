@@ -9,7 +9,7 @@ module.exports = read = async (chat_id, username, book_type, knowledge) => {
     const queryTypes = require("../../util/queryTypes");
     //check if user exists
     row = await db
-        .prepare("SELECT * FROM user_header WHERE chat_id = ? AND username = ?")
+        .prepare("SELECT * FROM player_header WHERE chat_id = ? AND username = ?")
         .get(chat_id, username);
 
     if (!row) {
@@ -119,7 +119,7 @@ module.exports = read = async (chat_id, username, book_type, knowledge) => {
 
     await db
         .prepare(
-            `UPDATE user_header set inventory = ?,knowledge = ? WHERE chat_id = ? AND username = ?`
+            `UPDATE player_header set inventory = ?,knowledge = ? WHERE chat_id = ? AND username = ?`
         )
         .run(JSON.stringify(inventory), JSON.stringify(knowledge_list), chat_id, username);
 

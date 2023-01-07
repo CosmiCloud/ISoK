@@ -553,7 +553,7 @@ module.exports = trekEncounter = async (chat_id, username,area, row) => {
                     
                     await db
                         .prepare(
-                            `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
+                            `UPDATE player_header set inventory = ? WHERE chat_id = ? AND username = ?`
                         )
                         .run(JSON.stringify(inventory), chat_id, username);
 

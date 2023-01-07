@@ -44,7 +44,7 @@ module.exports = addItemInventory = async (chat_id,username,pool,inventory) => {
   console.log(`POST TREK INV ${JSON.stringify(inventory)}`)
   await db
     .prepare(
-      `UPDATE user_header set inventory = ? WHERE chat_id = ? AND username = ?`
+      `UPDATE player_header set inventory = ? WHERE chat_id = ? AND username = ?`
     )
     .run(JSON.stringify(inventory), chat_id, username);
       
