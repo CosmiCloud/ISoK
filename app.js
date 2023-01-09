@@ -181,14 +181,14 @@ client.on("messageCreate", async (message) => {
 
     trek = await queryTypes.trek();
     area = args
-    result = await trek
+    trek_result = await trek
       .getData(chat_id, username, command,area)
       .then(async ({ result }) => {
         return result;
       })
       .catch((error) => console.log(`Error : ${error}`));
 
-      if (result.trek_status === 'Failed') {
+      if (trek_result.trek_status === 'Failed') {
           exampleEmbed = new EmbedBuilder()
               .setColor(`0xe01b46`)
               .setTitle('Trek Failed!')
@@ -198,11 +198,11 @@ client.on("messageCreate", async (message) => {
               );
       }
 
-      if (result.trek_status === 'Completed') {
+      if (trek_result.trek_status === 'Completed') {
           exampleEmbed = new EmbedBuilder()
-              .setColor(`0x${result.color}`)
+              .setColor(`0x${trek_result.color}`)
               .setTitle('Trek Completed!')
-              .setDescription(`${message.author} At last you discover ${result.quantity} ${result.rarity} ${result.item} from a trek!`)
+              .setDescription(`${message.author} At last you discover ${trek_result.quantity} ${trek_result.rarity} ${trek_result.item} from a trek!`)
               .addFields(
                   { name: 'Journey', value: `${trekEncounter.story}` }
               );
@@ -226,24 +226,24 @@ client.on("messageCreate", async (message) => {
         book_type = args[0]
         knowledge = args[1]
 
-        result = await read
+        read_result = await read
             .getData(chat_id, username, book_type, knowledge)
             .then(async ({ result }) => {
                 return result;
             })
             .catch((error) => console.log(`Error : ${error}`));
 
-        if (result.knowledge) {
+        if (read_result.knowledge) {
             exampleEmbed = new EmbedBuilder()
                 .setColor(`0x17e34d`)
                 .setTitle('Knowledge Gained!')
-                .setDescription(`${message.author} read a ${result.book} for ${result.book_xp} xp in ${result.knowledge}!`)
+                .setDescription(`${message.author} read a ${read_result.book} for ${read_result.book_xp} xp in ${read_result.knowledge}!`)
                 .addFields(
-                    { name: `${result.knowledge} knowledge level:`, value: `${result.level}` }
+                    { name: `${read_result.knowledge} knowledge level:`, value: `${read_result.level}` }
                 );
         } else {
             return message.channel.send(
-                `${result.message}, ${message.author}!`
+                `${read_result.message}, ${message.author}!`
             );
         }
 
