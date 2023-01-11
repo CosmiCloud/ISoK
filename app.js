@@ -53,7 +53,6 @@ client.on("messageCreate", async (message) => {
   }
 
   if (command === `createaccount` && permission === `allow`) {
-    message.delete();
     if (args.length != 1) {
       return message.channel.send(
         `You didn't provide a public key needed to create your account, ${message.author}!`

@@ -56,8 +56,8 @@ module.exports = createAccount = async (chat_id, username, public_key) => {
         .prepare("INSERT INTO txn_header (owner_address, action, type, keywords, timestamp, ual, assertionId, operationId, status, data, otp_fee, trac_fee, epochs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .run([
           public_key[0],
-          "isok",
           "account creation",
+          "isok",
           keywords,
           abs_timestamp,
           null,
