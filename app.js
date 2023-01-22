@@ -274,7 +274,7 @@ client.on('messageCreate', async message => {
           value: `${read_result.level}`
         })
     } else {
-      return message.channel.send(`${read_result.message}, ${message.author}!`)
+      return message.author.send(`${read_result.message}, ${message.author}!`)
     }
 
     await message.channel.send({ embeds: [exampleEmbed] })
